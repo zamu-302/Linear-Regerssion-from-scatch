@@ -95,16 +95,37 @@ while True:
        continue
     break
 
-x=file.iloc[:, x_feat_choice].to_numpy()
+x=file.iloc[:, x_feat_choice].to_numpy(dtype=float)
+x = (x - x.mean(axis=0)) / x.std(axis=0)
 m = x.shape[0]
 X = np.hstack([np.ones((m, 1)), x])
-Y=file.iloc[:, y_feat_choice].to_numpy()
-print("===========X Values ==============")
-print(X)
-print("===========Y Values ==============")
-print(Y)
+Y=file.iloc[:, y_feat_choice].to_numpy(dtype=float)
+Y=(Y-Y.mean())/Y.std()
+Theta = np.zeros((X.shape[1], 1)) 
 
-   
+
+
+iterations=1000
+alpha=0.01
+for i in range(iterations):
+    y_hat=X @ Theta  #Hypothesis 
+    cost=1/(2*m)*(((y_hat-Y).T) @ (y_hat-Y))# Cost function 
+
+    gradient=(1/m)*(X.T @(y_hat-Y))#Graident Function
+
+    Theta=Theta -(alpha*gradient)# Graident decsent
+
+    if i%100==0:
+       print(i,cost.item())
+
+
+
+
+
+
+
+
+
 
 
 
